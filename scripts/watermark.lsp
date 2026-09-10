@@ -1,0 +1,15 @@
+;; watermark.lsp - Place a large rotated watermark across the drawing
+;; Command: WATERMARK
+;; Usage: APPLOAD -> WATERMARK -> type the text (e.g. DRAFT or CONFIDENTIAL)
+(defun c:WATERMARK ( / text mn mx ctr size )
+  (setq text (getstring T "\nWatermark text <DRAFT>: "))
+  (if (= text "") (setq text "DRAFT"))
+  (setq mn (getvar "EXTMIN") mx (getvar "EXTMAX"))
+  (setq ctr (list (/ (+ (car mn) (car mx)) 2.0)
+                  (/ (+ (cadr mn) (cadr mx)) 2.0) 0.0))
+  (setq size (/ (- (cadr mx) (cadr mn)) 12.0))
+  (command "_.-LAYER" "_M" "WATERMARK" "_C" "252" "" "")
+  (command "_.TEXT" "_J" "_MC" ctr size 45 text)
+  (princ "\nWatermark placed on layer WATERMARK.")
+  (princ)
+)
